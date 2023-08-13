@@ -25,4 +25,11 @@ public class UserController {
         User newUser = userDto.toEntity(passwordEncoder.encode(userDto.getPassword()));
         userService.registerUser(newUser);
     }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/login")
+    public String loginUser(@Valid @RequestBody UserDto userDto) {
+        // 로그인 성공하면 토큰 넘겨줌
+        return userService.login(userDto.getEmail(), userDto.getPassword());
+    }
 }
