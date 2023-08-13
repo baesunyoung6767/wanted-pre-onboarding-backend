@@ -1,5 +1,7 @@
 package com.example.wanted.User.Service;
 
+import com.example.wanted.Exception.AppException;
+import com.example.wanted.Exception.ErrorCode;
 import com.example.wanted.User.Entity.User;
 import com.example.wanted.User.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +24,7 @@ public class UserService {
     public void validateDuplication(String email) {
         User user = userRepository.findByEmail(email);
         if(user != null) {
-            // 이미 가입된 회원입니다
+           throw new AppException(ErrorCode.DUPLICATED_EMAIL); // 이메일이 중복되는 경우
         }
     }
 }
