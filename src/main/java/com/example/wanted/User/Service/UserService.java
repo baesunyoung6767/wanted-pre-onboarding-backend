@@ -50,4 +50,14 @@ public class UserService {
 
         return JwtTokenUtil.createToken(email, secretKey);
     }
+
+    public User getUserByEmail(String email) {
+        User foundUser =  userRepository.findByEmail(email);
+
+        if(foundUser == null) {
+            throw new AppException(ErrorCode.USER_NOT_FOUNDED);
+        }
+
+        return foundUser;
+    }
 }

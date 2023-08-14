@@ -4,7 +4,9 @@ import com.example.wanted.User.Dto.UserDto;
 import com.example.wanted.User.Entity.User;
 import com.example.wanted.User.Service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +15,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
+@Slf4j
 public class UserController {
     private final UserService userService;
     private final BCryptPasswordEncoder passwordEncoder;
@@ -31,5 +34,10 @@ public class UserController {
     public String loginUser(@Valid @RequestBody UserDto userDto) {
         // 로그인 성공하면 토큰 넘겨줌
         return userService.login(userDto.getEmail(), userDto.getPassword());
+    }
+
+    @GetMapping("/hello")
+    public String hello() {
+        return "안녕";
     }
 }
