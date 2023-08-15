@@ -29,6 +29,8 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/user/register", "/user/login").permitAll() // 회원가입과 로그인의 경우에만 권한 부여 필요없음
                 .antMatchers(HttpMethod.POST, "/**").authenticated()
+                .antMatchers(HttpMethod.DELETE, "/**").authenticated()
+                .antMatchers(HttpMethod.PATCH, "/**").authenticated()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
