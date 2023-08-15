@@ -1,6 +1,7 @@
 package com.example.wanted.Post.Controller;
 
 import com.example.wanted.Post.Dto.PostDto;
+import com.example.wanted.Post.Dto.PostUpdateDto;
 import com.example.wanted.Post.Entity.Post;
 import com.example.wanted.Post.Service.PostService;
 import com.example.wanted.User.Entity.User;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,5 +39,19 @@ public class PostController {
     @GetMapping("/{post_id}")
     public Optional<Post> getPost(@PathVariable int post_id) {
         return postService.getPost(post_id);
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PatchMapping("/{post_id}")
+    public void updatePost(@PathVariable int post_id, Principal principal, @RequestBody PostUpdateDto postUpdateDto) {
+        String loginUser = principal.getName();
+        postService.updatePost(post_id,loginUser,postUpdateDto);
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @DeleteMapping("/{post_id}")
+    public void deletePost(@PathVariable int post_id, Principal principal) {
+        String loginUser = principal.getName();
+        postService.deletePost(post_id,loginUser);
     }
 }

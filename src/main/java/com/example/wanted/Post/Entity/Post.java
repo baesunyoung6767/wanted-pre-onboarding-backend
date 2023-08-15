@@ -31,4 +31,9 @@ public class Post {
         this.postContent = postContent;
         this.user = postUser;
     }
+
+    public void updatePost(String updateTitle, String updateContent) {
+        this.postTitle = updateTitle;
+        this.postContent = updateContent;
+    }
 }

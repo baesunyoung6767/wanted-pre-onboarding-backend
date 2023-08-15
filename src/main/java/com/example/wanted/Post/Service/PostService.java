@@ -1,5 +1,8 @@
 package com.example.wanted.Post.Service;
 
+import com.example.wanted.Exception.AppException;
+import com.example.wanted.Exception.ErrorCode;
+import com.example.wanted.Post.Dto.PostUpdateDto;
 import com.example.wanted.Post.Entity.Post;
 import com.example.wanted.Post.Repository.PostRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,5 +29,28 @@ public class PostService {
 
     public Optional<Post> getPost(int postId) {
         return postRepository.findById(postId);
+    }
+
+    @Transactional
+    public void updatePost(int postId, String loginUser , PostUpdateDto postUpdateDto) {
+        Optional<Post> foundPost = postRepository.findById(postId);
+
+        if(loginUser.equals(foundPost.get().getUser().getEmail())) {
+            foundPost.get().updatePost(postUpdateDto.getUpdateTitle(), postUpdateDto.getUpdateContent());
+            postRepository.save(foundPost.get());
+        } else {
+            throw new AppException(ErrorCode.USER_MISMATCH);
+        }
+    }
+
+    @Transactional
+    public void deletePost(int postId, String loginUser) {
+        Optional<Post> foundPost = postRepository.findById(postId);
+
+        if(loginUser.equals(foundPost.get().getUser().getEmail())) {
+            postRepository.delete(foundPost.get());
+        } else {
+            throw new AppException(ErrorCode.USER_MISMATCH);
+        }
     }
 }
