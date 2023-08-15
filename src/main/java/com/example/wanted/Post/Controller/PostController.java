@@ -1,5 +1,6 @@
 package com.example.wanted.Post.Controller;
 
+import com.example.wanted.Post.Dto.PageResponseDto;
 import com.example.wanted.Post.Dto.PostDto;
 import com.example.wanted.Post.Dto.PostUpdateDto;
 import com.example.wanted.Post.Entity.Post;
@@ -7,6 +8,7 @@ import com.example.wanted.Post.Service.PostService;
 import com.example.wanted.User.Entity.User;
 import com.example.wanted.User.Service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,6 +35,16 @@ public class PostController {
     @GetMapping
     public List<Post> postList() {
         return postService.postList();
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @GetMapping("/{page_num}/{page_size}/{sort_by}")
+    public PageResponseDto pageGetPost(@PathVariable int page_num, @PathVariable int page_size, @PathVariable int sort_by) {
+        Sort.Direction sortStr;
+        if(sort_by == 0) sortStr = Sort.Direction.ASC;
+        else sortStr = Sort.Direction.DESC;
+
+        return postService.searchAllPaging(page_num, page_size, sortStr);
     }
 
     @ResponseStatus(HttpStatus.CREATED)

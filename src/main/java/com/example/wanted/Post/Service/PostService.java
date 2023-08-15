@@ -2,10 +2,16 @@ package com.example.wanted.Post.Service;
 
 import com.example.wanted.Exception.AppException;
 import com.example.wanted.Exception.ErrorCode;
+import com.example.wanted.Post.Dto.PageResponseDto;
+import com.example.wanted.Post.Dto.PostDto;
 import com.example.wanted.Post.Dto.PostUpdateDto;
 import com.example.wanted.Post.Entity.Post;
 import com.example.wanted.Post.Repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +35,21 @@ public class PostService {
 
     public Optional<Post> getPost(int postId) {
         return postRepository.findById(postId);
+    }
+
+    public PageResponseDto searchAllPaging(int pageNo, int pageSize, Sort.Direction sortBy) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy).descending());
+        Page<Post> postPage = postRepository.findAll(pageable);
+
+        List<Post> listPosts = postPage.getContent();
+
+        return PageResponseDto.builder()
+                .pageNo(pageNo)
+                .pageSize(pageSize)
+                .totalElements(postPage.getTotalElements())
+                .totalPages(postPage.getTotalPages())
+                .last(postPage.isLast())
+                .build();
     }
 
     @Transactional
